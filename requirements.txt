@@ -1,8 +1,8 @@
-streamlit==1.25.0
+numpy==1.26.4
+streamlit==1.31.0
 pandas==2.2.2
-plotly==5.15.0
-facebook-business==17.0.2
-python-dotenv==1.0.0
-openai==0.28.0
-xlsxwriter==3.1.2
-numpy==1.26.4 
+plotly==5.22.0
+facebook-business==19.0.0
+python-dotenv==1.0.1
+openai==1.35.0
+xlsxwriter==3.2.0
