@@ -1,0 +1,7 @@
+streamlit
+pandas
+plotly
+facebook-business
+python-dotenv
+openai
+xlsxwriter
