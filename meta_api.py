@@ -1,9 +1,13 @@
 import os
+import logging
 from dotenv import load_dotenv
 from facebook_business.api import FacebookAdsApi
 from facebook_business.adobjects.adaccount import AdAccount
 from facebook_business.exceptions import FacebookRequestError
 import pandas as pd
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 load_dotenv()
 
@@ -18,6 +22,7 @@ def validate_env():
         raise ValueError("Beberapa variabel lingkungan tidak ditemukan. Periksa file .env Anda.")
 
 def get_ads_data():
+    logger.info("Mengambil data iklan dari Facebook Ads API...")
     validate_env()
     try:
         FacebookAdsApi.init(APP_ID, APP_SECRET, ACCESS_TOKEN)
@@ -53,9 +58,12 @@ def get_ads_data():
                 'return': spend * roas
             })
 
+        logger.info(f"Berhasil mengambil {len(data)} data iklan.")
         return pd.DataFrame(data)
 
     except FacebookRequestError as e:
+        logger.error(f"Kesalahan API Facebook: {e}")
         raise RuntimeError(f"Kesalahan API Facebook: {e}")
     except Exception as e:
+        logger.error(f"Gagal mengambil data iklan: {e}")
         raise RuntimeError(f"Gagal mengambil data iklan: {e}")

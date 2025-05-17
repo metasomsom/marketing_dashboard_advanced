@@ -17,6 +17,11 @@ from utils import (
 load_dotenv()
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
+# Validasi OPENAI_API_KEY
+if not openai.api_key:
+    st.error("OPENAI_API_KEY tidak ditemukan. Periksa file .env Anda.")
+    st.stop()
+
 st.set_page_config(page_title="Meta Ads Dashboard", layout="wide")
 st.title("📊 Dashboard Meta Ads")
 
@@ -40,9 +45,11 @@ else:
     st.subheader("🧠 Generator Iklan AI")
     product = st.text_input("Masukkan Nama Produk")
     if st.button("Buat Copy Iklan"):
-        if product.strip():
-            with st.spinner("Membuat teks iklan..."):
-                copy = generate_ad_copy(product)
-                st.text_area("📝 Hasil Copy Iklan:", copy, height=200)
-        else:
+        if not product.strip():
             st.warning("Masukkan nama produk terlebih dahulu.")
+        elif len(product.strip()) > 100:
+            st.warning("Nama produk terlalu panjang. Maksimum 100 karakter.")
+        else:
+            with st.spinner("Membuat teks iklan..."):
+                copy = generate_ad_copy(product.strip())
+                st.text_area("📝 Hasil Copy Iklan:", copy, height=200)

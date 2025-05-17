@@ -5,8 +5,9 @@ import openai
 import io
 from functools import lru_cache
 from meta_api import get_ads_data
+from openai.error import RateLimitError
 
-@st.cache_data(show_spinner=False)
+@st.cache_data(show_spinner=False, ttl=3600)  # Cache selama 1 jam
 def load_and_cache_data():
     try:
         return get_ads_data()
@@ -38,11 +39,13 @@ def download_filtered_data(filtered_data):
 def generate_ad_copy(product):
     try:
         response = openai.ChatCompletion.create(
-            model="gpt-4",
+            model=os.getenv("OPENAI_MODEL", "gpt-4"),
             messages=[
                 {"role": "user", "content": f"Buatkan teks iklan menarik untuk produk '{product}'"}
             ]
         )
         return response['choices'][0]['message']['content']
+    except RateLimitError:
+        return "Batas kuota OpenAI tercapai. Coba lagi nanti."
     except Exception as e:
         return f"Terjadi kesalahan saat membuat teks iklan: {e}"
