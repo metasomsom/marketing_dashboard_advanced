@@ -17,7 +17,6 @@ from utils import (
 load_dotenv()
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
-# Validasi OPENAI_API_KEY
 if not openai.api_key:
     st.error("OPENAI_API_KEY tidak ditemukan. Periksa file .env Anda.")
     st.stop()
@@ -25,7 +24,6 @@ if not openai.api_key:
 st.set_page_config(page_title="Meta Ads Dashboard", layout="wide")
 st.title("📊 Dashboard Meta Ads")
 
-# Load and cache data
 data = load_and_cache_data()
 
 if data.empty:
